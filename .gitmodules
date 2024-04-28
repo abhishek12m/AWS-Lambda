@@ -1,0 +1,3 @@
+[submodule "Contact-us-frontend/contact-us"]
+	path = Contact-us-frontend/contact-us
+	url = https://github.com/abhishek12m/AWS-Lambda.git
