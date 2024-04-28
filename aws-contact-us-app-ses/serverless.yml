@@ -1,0 +1,23 @@
+service: aws-contact-us-app-ses
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "ses:*"
+          Resource:
+            - "*"
+
+functions:
+  create:
+    handler: handler/contactUs.contactUs
+    events:
+      - http:
+          path: contact-us
+          method: post
+          cors: true
