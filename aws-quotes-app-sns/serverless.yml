@@ -31,10 +31,10 @@ provider:
           Resource:
             - Fn::GetAtt: [ UsersTable, Arn ]
   environment:
-    SENDGRID_API_KEY: process.env.SENDGRIDS_API_KEY
+    SENDGRID_API_KEY: xxxx
     USERS_TABLE: ${self:custom.tableName}
     REGION: ${self:provider.region}
-    SNS_TOPIC_ARN: arn:aws:sns:us-east-1:393298499054:quotes-messages-dev
+    # SNS_TOPIC_ARN: arn:aws:sns:us-east-1:Accountid:quotes-messages-dev
 
 functions:
   quotes:
@@ -93,7 +93,7 @@ resources:
       Properties:
         TopicArn: !Ref QuotesMessages
         Protocol: email
-        Endpoint: process.env.EMAIL
+        # Endpoint: email@gmail.com
         DeliveryPolicy: 
           healthyRetryPolicy:
             numRetries: 20

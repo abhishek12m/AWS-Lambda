@@ -23,7 +23,7 @@ const data=JSON.parse(event.body);
     const emailBody = buildEmailBody(event.requestContext.identity, data);
 
     await publisToSNS(emailBody);
-    await axios.post(" https://kzs71owd56.execute-api.us-east-1.amazonaws.com/dev/subscribe", { email: data.email }).
+    await axios.post("https://4noakmy0r7.execute-api.us-east-1.amazonaws.com/dev/subscribe", { email: data.email }).
         then(function (response) {
             console.log(response);
         }).catch(function (error) {

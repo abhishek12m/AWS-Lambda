@@ -11,7 +11,7 @@ module.exports.sendEmail = async (event) => {
     try {
         await sendgrid.sendMultiple({
             to: subs,
-            from: process.env.EMAIL,
+            from: "abhishek@gmail.com",
             subject: `[Daily words of wisdom]`,
             text: 'Get Inspired Today',
             html: emailHTML
@@ -31,7 +31,7 @@ module.exports.sendEmail = async (event) => {
 }
 
 const getSubs = async () => {
-    const subscribers = await axios.get("https://kzs71owd56.execute-api.us-east-1.amazonaws.com/dev/getSubscriber")
+    const subscribers = await axios.get("https://4noakmy0r7.execute-api.us-east-1.amazonaws.com/dev/getSubscriber")
     var list = [];
     subscribers.data.map((item) => {
         list.push(item.email);
@@ -41,7 +41,7 @@ const getSubs = async () => {
 }
 
 const getQuote = async () => {
-    const getQuotes = await axios.get("https://kzs71owd56.execute-api.us-east-1.amazonaws.com/dev/quotes")
+    const getQuotes = await axios.get("https://4noakmy0r7.execute-api.us-east-1.amazonaws.com/dev/quotes")
 
     var length = getQuotes.data.quotes.length;
     var randomQuote = getQuotes.data.quotes[Math.floor(Math.random() * length)];

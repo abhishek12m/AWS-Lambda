@@ -2,7 +2,7 @@ service: aws-node-todo
 frameworkVersion: "3"
 
 custom:
-  tableName: "users-table-${sls:stage}"
+  tableName: "users-table-todo-${sls:stage}"
 
 provider:
   name: aws
@@ -39,6 +39,7 @@ functions:
           path: todos/getAll
           method: get
           cors: true
+         # authorizer: xx
 
   get:
     handler: handler/getById.getById
