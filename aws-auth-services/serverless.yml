@@ -21,7 +21,6 @@ functions:
       - http:
           path: public
           method: POST
-          authorizer: auth
   privateEndpoint:
     handler: handler/private.handler
     events:
