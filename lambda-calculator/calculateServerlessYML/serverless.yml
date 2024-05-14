@@ -1,0 +1,6 @@
+calculate:
+  handler: handler/calculate.calculate
+  events:
+    - httpApi:
+        path: /calculate/{operator}
+        method: post

@@ -1,0 +1,10 @@
+service: lambda-calculator
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  - ${file(./calculateServerlessYML/serverless.yml)}
+  - ${file(./jwtTokenGeneratorServerlessYML/serverless.yml)}
