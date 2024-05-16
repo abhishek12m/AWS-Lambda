@@ -1,8 +1,0 @@
-add:
-  handler: calcFunctions/add.add
-subtract:
-  handler: calcFunctions/subtract.subtract
-multiply:
-  handler: calcFunctions/multiply.multiply
-divide:
-  handler: calcFunctions/divide.divide

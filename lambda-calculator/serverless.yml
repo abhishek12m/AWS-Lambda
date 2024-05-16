@@ -5,8 +5,4 @@ provider:
   name: aws
   runtime: nodejs18.x
 
-functions:
-  - ${file(./calculateServerlessYML/calculate.yml)}
-  - ${file(./jwtTokenGeneratorServerlessYML/jwtTokenGenerator.yml)}
-  - ${file(./calCServerlessYML/calC.yml)}
-  - ${file(./authServerlessYML/authorizer.yml)}
+functions: ${file(./serverlessYML/mainServerlessFile.yml):functions}

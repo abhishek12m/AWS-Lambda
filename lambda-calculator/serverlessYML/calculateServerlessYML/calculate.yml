@@ -1,0 +1,8 @@
+handler: handler/calculate.calculate
+events:
+  - http:
+      path: /calculate/{operator}
+      method: post
+      authorizer: 
+          name: authorizeToken
+          type: request

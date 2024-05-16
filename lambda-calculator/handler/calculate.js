@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 const lambda = new AWS.Lambda();
 
 exports.calculate = async (event, context, callback) => {
-    // Check if event.body exists
+    
     if (!event.body) {
         const response = {
             statusCode: 400,
@@ -11,12 +11,12 @@ exports.calculate = async (event, context, callback) => {
         return callback(null, response);
     }
 
-    // Parse the request body
+    
     const requestBody = JSON.parse(event.body);
     const { num1, num2 } = requestBody;
     const operator=event.pathParameters.operator;
 
-    // Check if the operator and numbers are provided
+    
     if (!operator || !num1 || !num2) {
         const response = {
             statusCode: 400,
@@ -25,7 +25,7 @@ exports.calculate = async (event, context, callback) => {
         return callback(null, response);
     }
 
-    // Lambda function names
+    
     const functions = {
         'add': 'lambda-calculator-dev-add',
         'subtract': 'lambda-calculator-dev-subtract',
@@ -33,7 +33,7 @@ exports.calculate = async (event, context, callback) => {
         'divide': 'lambda-calculator-dev-divide'
     };
 
-    // Check if the operator is valid
+    
     if (!functions.hasOwnProperty(operator)) {
         const response = {
             statusCode: 400,
@@ -42,10 +42,10 @@ exports.calculate = async (event, context, callback) => {
         return callback(null, response);
     }
 
-    // Invoke the appropriate lambda function
+    
     const params = {
         FunctionName: functions[operator],
-        Payload: JSON.stringify({ num1, num2 }) // Pass num1 and num2 to the other Lambda functions
+        Payload: JSON.stringify({ num1, num2 })
     };
 
     try {

@@ -1,0 +1,5 @@
+handler: AuthFunction/jwtTokenGenerator.generateToken
+events:
+  - httpApi:
+      path: /generate-token
+      method: post

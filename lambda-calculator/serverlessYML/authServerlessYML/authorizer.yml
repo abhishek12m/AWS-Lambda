@@ -1,0 +1,1 @@
+handler: AuthFunction/authorizerFunction.authorizeToken

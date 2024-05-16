@@ -1,0 +1,8 @@
+functions:
+  jwtTokenGenerator: ${file(serverlessYML/jwtTokenGeneratorServerlessYML/jwtTokenGenerator.yml)}
+  authorizeToken: ${file(serverlessYML/authServerlessYML/authorizer.yml)}
+  calculate: ${file(./serverlessYML/calculateServerlessYML/calculate.yml)}
+  add: ${file(./serverlessYML/calCServerlessYML/add.yml)}
+  divide: ${file(./serverlessYML/calCServerlessYML/divide.yml)}
+  subtract: ${file(./serverlessYML/calCServerlessYML/subtract.yml)}
+  multiply: ${file(./serverlessYML/calCServerlessYML/multiply.yml)}
