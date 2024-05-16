@@ -1,17 +1,19 @@
-module.exports.subtract = async (event) => {
+module.exports.subtract = async (event, context, callback) => {
     try {
-        const { num1, num2 } = JSON.parse(event.body);
+        const { num1, num2 } = event;
         const result = num1 - num2;
         
-        return {
+        const response = {
             statusCode: 200,
             body: JSON.stringify({ result: result })
         };
+        
+        callback(null, response);
     } catch (error) {
-        console.error('Error in subtract function:', error);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ error: "Internal Server Error" })
-        };
+        console.error('Error parsing request body:', error);
+        callback(null, {
+            statusCode: 400,
+            body: JSON.stringify({ message: "Invalid request body" })
+        });
     }
 };

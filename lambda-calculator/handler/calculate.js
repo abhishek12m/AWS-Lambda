@@ -1,40 +1,61 @@
-const addFunction = require('../CalcFunctions/add');
-const subtractFunction = require('../CalcFunctions/subtract');
-const multiplyFunction = require('../CalcFunctions/multiply');
-const divideFunction = require('../CalcFunctions/divide');
-const { authorizeToken } = require('../AuthFunction/authorizerFunction');
+const AWS = require('aws-sdk');
+const lambda = new AWS.Lambda();
 
-module.exports.calculate = async (event) => {
-    try {
-        const authResult = await authorizeToken(event);
-        // console.log("authresult: ",authResult);
-
-        if (authResult.statusCode !== 200) {
-
-            return authResult;
-        }
-
-
-        const operator = event.pathParameters.operator;
-        // console.log("operator: ", operator);
-        const functions = {
-            'add': addFunction.add,
-            'subtract': subtractFunction.subtract,
-            'multiply': multiplyFunction.multiply,
-            'divide': divideFunction.divide
+exports.calculate = async (event, context, callback) => {
+    // Check if event.body exists
+    if (!event.body) {
+        const response = {
+            statusCode: 400,
+            body: JSON.stringify({ error: "No request body provided" })
         };
+        return callback(null, response);
+    }
 
-        const selectedFunction = functions[operator];
-        // console.log("selected function", selectedFunction)
-        if (!selectedFunction || typeof selectedFunction !== 'function') {
-            throw new Error('Function not found');
-        }
+    // Parse the request body
+    const requestBody = JSON.parse(event.body);
+    const { num1, num2 } = requestBody;
+    const operator=event.pathParameters.operator;
 
-        const result = await selectedFunction(event);
+    // Check if the operator and numbers are provided
+    if (!operator || !num1 || !num2) {
+        const response = {
+            statusCode: 400,
+            body: JSON.stringify({ error: "Invalid request body" })
+        };
+        return callback(null, response);
+    }
 
-        return result;
+    // Lambda function names
+    const functions = {
+        'add': 'lambda-calculator-dev-add',
+        'subtract': 'lambda-calculator-dev-subtract',
+        'multiply': 'lambda-calculator-dev-multiply',
+        'divide': 'lambda-calculator-dev-divide'
+    };
+
+    // Check if the operator is valid
+    if (!functions.hasOwnProperty(operator)) {
+        const response = {
+            statusCode: 400,
+            body: JSON.stringify({ error: "Invalid operator" })
+        };
+        return callback(null, response);
+    }
+
+    // Invoke the appropriate lambda function
+    const params = {
+        FunctionName: functions[operator],
+        Payload: JSON.stringify({ num1, num2 }) // Pass num1 and num2 to the other Lambda functions
+    };
+
+    try {
+        const result = await lambda.invoke(params).promise();
+        console.log("result: ",result);
+        callback(null, {
+            statusCode: 200,
+            body: result.Payload
+        });
     } catch (error) {
-        console.error('Error in calculate function:', error);
-        return error;
+        callback(error);
     }
 };

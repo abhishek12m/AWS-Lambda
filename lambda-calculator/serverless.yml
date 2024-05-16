@@ -6,5 +6,7 @@ provider:
   runtime: nodejs18.x
 
 functions:
-  - ${file(./calculateServerlessYML/serverless.yml)}
-  - ${file(./jwtTokenGeneratorServerlessYML/serverless.yml)}
+  - ${file(./calculateServerlessYML/calculate.yml)}
+  - ${file(./jwtTokenGeneratorServerlessYML/jwtTokenGenerator.yml)}
+  - ${file(./calCServerlessYML/calC.yml)}
+  - ${file(./authServerlessYML/authorizer.yml)}
