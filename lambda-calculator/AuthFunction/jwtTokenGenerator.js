@@ -3,10 +3,10 @@ const { getSSMParameter } = require('../ssmUtil/ssmUtil');
 
 module.exports.generateToken = async (event) => {
     try {
-        const secretKey=getSSMParameter("SECRET_KEY");
-        const { username, password,expiresIn } = JSON.parse(event.body);
+        const secretKey = await getSSMParameter("SECRET_KEY");
+        const { username, password, expiresIn } = JSON.parse(event.body);
 
-        const token = jwt.sign({ username, password }, secretKey, { expiresIn:expiresIn ||  '1h' });
+        const token = jwt.sign({ username, password }, secretKey, { expiresIn: expiresIn || '1h' });
 
         return {
             statusCode: 200,
