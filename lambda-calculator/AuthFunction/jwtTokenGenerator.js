@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
+const { getSSMParameter } = require('../ssmUtil/ssmUtil');
 
 module.exports.generateToken = async (event) => {
     try {
-        const { username, password } = JSON.parse(event.body);
+        const secretKey=getSSMParameter("SECRET_KEY");
+        const { username, password,expiresIn } = JSON.parse(event.body);
 
-        const secretKey = 'not_secret';
-
-        const token = jwt.sign({ username, password }, secretKey, { expiresIn: '1h' });
+        const token = jwt.sign({ username, password }, secretKey, { expiresIn:expiresIn ||  '1h' });
 
         return {
             statusCode: 200,

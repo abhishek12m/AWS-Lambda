@@ -1,34 +1,31 @@
 const jwt = require('jsonwebtoken');
+const { getSSMParameter } = require('../ssmUtil/ssmUtil');
 
-module.exports.authorizeToken = async (event) => {
+module.exports.authorizeToken = async (event, context, callback) => {
+    const secretKey = await getSSMParameter('SECRET_KEY');
+    const token = event.headers.Authorization;
+
+    if (!token) {
+        console.log("token not provided");
+        return generateErrorResponse(401, "Unauthorized: Token missing", callback);
+    }
+
+    const tokenValue = token.split(' ')[1];
+    if (!tokenValue) {
+        return generateErrorResponse(401, "Unauthorized: Token value missing", callback);
+    }
+
     try {
-        const token = event.headers.Authorization;
-
-        if (!token) {
-            return generateErrorResponse(401, "Unauthorized: Token missing");
-        }
-
-        const tokenValue = token.split(' ')[1];
-        if (!tokenValue) {
-            return generateErrorResponse(401, "Unauthorized: Token value missing");
-        }
-
-        try {
-            const secretKey = 'not_secret';
-            const decoded = jwt.verify(tokenValue, secretKey);
-            return generatePolicy(decoded.username, 'Allow', event.methodArn);
-        } catch (error) {
-            console.log("error: ", error);
-            if (error.name === 'TokenExpiredError') {
-                console.log("error name: ", error.name);
-                return generateErrorResponse(401, "Unauthorized: Token expired");
-            } else {
-                return generateErrorResponse(401, "Unauthorized: Invalid token");
-            }
-        }
+        const decoded = jwt.verify(tokenValue, secretKey);
+        return generatePolicy(decoded.username, 'Allow', event.methodArn);
     } catch (error) {
-        console.error('Error authorizing token:', error);
-        return generateErrorResponse(500, "Internal Server Error");
+        console.log("error: ", error);
+        if (error.name === 'TokenExpiredError') {
+            console.log("error name: ", error.name);
+            return generateErrorResponse(401, "Unauthorized: Token expired", callback);
+        } else {
+            return generateErrorResponse(401, "Unauthorized: Invalid token", callback);
+        }
     }
 };
 
@@ -48,9 +45,12 @@ function generatePolicy(principalId, effect, resource) {
     };
 }
 
-function generateErrorResponse(statusCode, message) {
-    return {
-        statusCode: statusCode,
-        body: JSON.stringify({ message: message })
-    };
+function generateErrorResponse(statusCode, message, callback) {
+    console.log("status code: ", statusCode);
+    console.log("message: ", message);
+    callback("Unauthorized")
+    // return {
+    //     statusCode: statusCode,
+    //     body: message
+    // };
 }
